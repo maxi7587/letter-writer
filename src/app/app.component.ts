@@ -55,4 +55,8 @@ export class AppComponent {
             }
         );
     }
+
+    public exportPDF(data) {
+        // TODO; create and export pdf from XLS data
+    }
 }
