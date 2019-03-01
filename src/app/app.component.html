@@ -1,49 +1,95 @@
-<router-outlet></router-outlet>
-
-<app-upload
-    (change)="onFileChange($event)"
-    >
-    <div
-        *ngIf="!preview"
-        class="drop-box"
-        style="width: 250px; height: 250px; padding: 20px"
-        fxLayout="row"
-        fxLayoutAlign="center center">
-        <div
-            flex="70"
-            fxLayout="column"
-            fxLayoutAlign="center center"
+<mat-toolbar style="position: fixed; top:0; left: 0; width: 100%; margin: 0" color="primary">
+    <h1 class="mat-headline-1">Pagá FORRO!!! O mejor no, así te ejecuto la casa...</h1>
+</mat-toolbar>
+<!-- <router-outlet></router-outlet> -->
+<div style="width: 100%; margin-top: 112px" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="32px">
+    <div fxLayout="row" fxLayoutGap="32px">
+        <app-upload
+            style="width: 300px"
+            (change)="onFileChange($event)"
             >
-            <img
-                width="auto"
-                height="200px"
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/.xls_icon.svg/2000px-.xls_icon.svg.png"
-                >
-            <p
-                class="text-center mat-title"
-                >
-                Suelta el archivo <strong>.XLS</strong> aquí
-            </p>
-            <span
-                class="text-center mat-body-1"
-                >
-                o haz click para utilizar el explorador
-            </span>
+            <!-- style="width: 250px; height: 250px; padding: 20px" -->
+            <!-- <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                > -->
+                <div
+                    fxFlex="100"
+                    fxLayout="column"
+                    fxLayoutAlign="center center"
+                    >
+                    <img
+                        width="auto"
+                        height="200px"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/.xls_icon.svg/2000px-.xls_icon.svg.png"
+                        >
+                    <!-- <p
+                        class="text-center mat-title"
+                        >
+                        Arrastrá el <strong>.XLS</strong> hasta acá
+                    </p>
+                    <span
+                        class="text-center mat-body-1"
+                        >
+                        o haz click para utilizar el explorador
+                    </span> -->
+                    <span
+                        style="text-align: center; width: 250px"
+                        class="mat-subheading-2"
+                        >
+                        Hacé click sobre la imagen para cargar un archivo XLS
+                    </span>
+                </div>
+            <!-- </div> -->
+        </app-upload>
+
+        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px">
+            <mat-form-field>
+                <input matInput placeholder="Filtro" name="filter" [(ngModel)]="street_filter">
+            </mat-form-field>
+
+            <button mat-raised-button style="width: 150px" color="primary" (click)="filterData(street_filter)">Filtrar</button>
+            <button mat-raised-button style="width: 150px" color="primary" (click)="exportPDF(filtered_data)">Descargar cartas</button>
         </div>
     </div>
-</app-upload>
+</div>
 
-<mat-form-field>
-    <input matInput type="text" name="filter" [(ngModel)]="street_filter">
-</mat-form-field>
-
-<button mat-button (click)="filterData(street_filter)">Filtrar</button>
-<button mat-button (click)="exportPDF(filtered_data)">Exportar PDF</button>
-
-<table class="sjs-table">
+<!-- <table class="sjs-table">
 	<tr *ngFor="let row of filtered_data">
 		<td *ngFor="let val of row">
 			{{val}}
 		</td>
 	</tr>
-</table>
+</table> -->
+
+<div class="mat-elevation-z8" *ngIf="this.filtered_data">
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <!-- Position Column -->
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> Cliente N° </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element[1] }} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element[2] }} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="address">
+            <mat-header-cell *matHeaderCellDef> Domicilio </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element[3] }} </mat-cell>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="total">
+            <mat-header-cell *matHeaderCellDef> Total a cobrar </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element[15] }} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
