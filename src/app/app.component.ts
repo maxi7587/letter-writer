@@ -214,8 +214,8 @@ DE VERAZ Y CODESUR. CASO CONTRATIO SE INICIARAN LAS ACCIONES LEAGLES CORRESPONDI
             new docx.Paragraph(`M.P. 9827`)
         );
 
-        for (let border of table.Properties.setWidth(docx.WidthType.AUTO, 100).root[1].root) {
-            border.root[0].root.value = null;
+        for (let border of ((table.Properties.setWidth(docx.WidthType.AUTO, 100) as any).root[1] as any).root) {
+            (border.root[0] as any).root.value = null;
         }
     }
 
