@@ -33,7 +33,7 @@ export class AppComponent implements AfterViewInit {
         this.setDataSourceAttributes();
     }
 
-    public doc = new docx.Document();
+    public doc: docx.Document;
 
     public constructor(public changeDetectorRef: ChangeDetectorRef) {}
 
@@ -82,10 +82,13 @@ export class AppComponent implements AfterViewInit {
     }
 
     public exportPDF(data) {
+        this.doc = new docx.Document();
         this.generate(data[0]);
         for (let row of data.slice(1)) {
             this.generate(row, true);
         }
+        this.addHeader();
+        this.addFooter();
         this.save_document();
         // TODO; create and export pdf from XLS data
     }
@@ -98,44 +101,12 @@ export class AppComponent implements AfterViewInit {
         const total_required_data: string = parseInt(client_data[16], 10).toFixed(2);
         const total_charge_data: string = parseInt(client_data[15], 10).toFixed(2);
 
-        let paragraph;
+        let paragraph5;
         if (new_page) {
-            paragraph = new docx
-                .Paragraph('H & P ESTUDIO JURIDICO')
-                .heading1()
-                .pageBreakBefore();
+            paragraph5 = new docx.Paragraph().pageBreakBefore();
         } else {
-            paragraph = new docx
-                .Paragraph('H & P ESTUDIO JURIDICO')
-                .heading1();
+            paragraph5 = new docx.Paragraph();
         }
-
-        const paragraph2 = new docx.Paragraph();
-        const address = new docx
-            .TextRun('Dirección: Las Heras 168')
-            .bold();
-        const phone = new docx
-            .TextRun('Teléfono: 2604423601- Celular: 260-154845351 / 260-154089238 ')
-            .tab()
-            .bold();
-        paragraph2.addRun(address);
-        paragraph2.addRun(phone);
-
-        const paragraph3 = new docx.Paragraph().center();
-        const divider = new docx
-            .TextRun('--------------------------------------------------------------------')
-            .tab()
-            .bold();
-        paragraph3.addRun(divider);
-
-        const paragraph4 = new docx.Paragraph().end();
-        const origin = new docx
-            .TextRun('San Rafael, Mendoza 19 de Septiembre de 2018')
-            .bold()
-            .rightToLeft();
-        paragraph4.addRun(origin);
-
-        const paragraph5 = new docx.Paragraph();
         const name = new docx
             .TextRun(`SR/A ${client_name_data}:`)
             .bold();
@@ -159,50 +130,169 @@ export class AppComponent implements AfterViewInit {
             .bold();
         paragraph8.addRun(client_id);
 
-        const paragraph9 = new docx.Paragraph().distribute();
+        const paragraph9 = new docx.Paragraph().justified();
         const body = new docx
-            .TextRun(`
-                Nos comunicamos con usted por la presente en representación de “CALZADOS LOS GALLEGOS S.R.L.”. \
+            .TextRun(
+                `Nos comunicamos con usted por la presente en representación de “CALZADOS LOS GALLEGOS S.R.L.”. \
 Ya que registramos a la fecha un saldo impago que mantiene con esta empresa, la cual actualmente asciende al monto \
 de $${total_required_data} correspondiendo la misma a la compra de mercadería realizada por usted en las \
-instalaciones de la entidad, resultando este monto la suma de capital, intereses y honorarios.
-            `);
+instalaciones de la entidad, resultando este monto la suma de capital, intereses y honorarios.`
+            );
         paragraph9.addRun(body);
 
-        const paragraph10 = new docx.Paragraph().distribute();
+        const paragraph10 = new docx.Paragraph().justified();
         const body_2 = new docx
-            .TextRun(`
-                POR ESTE MOTIVO LO INTIMAMOS A QUE CONCURRA A NUESTRO ESTUDIO JURIDICO UBICADO EN CALLE LAS HERAS 168 \
+            .TextRun(
+                `POR ESTE MOTIVO LO INTIMAMOS A QUE CONCURRA A NUESTRO ESTUDIO JURIDICO UBICADO EN CALLE LAS HERAS 168 \
 DE ESTA CIUDAD DE SAN RAFAEL, MENDOZA, DENTRO DE LAS 48 HS. DE RECIBIDA LA PRESENTE, OTORGANDOLE POR UNICA VEZ LA POSIBILIDAD \
 DE REGULARIZAR SU SITUACION POR UN MONTO TOTAL DE $${total_charge_data} CON EL CUAL SE CANCELARIA TOTALMENTE SU DEUDA, \
 ACCEDIENDO AUTOMATICAMENTE A UNA POSIBLE FINANCIACION EN LOS PRODUCTOS DE LA EMPRESA Y UNA DESVINCULACION DE LOS SISTEMAS \
-DE VERAZ Y CODESUR. CASO CONTRATIO SE INICIARAN LAS ACCIONES LEAGLES CORRESPONDIENTES.
-            `);
+DE VERAZ Y CODESUR. CASO CONTRATIO SE INICIARAN LAS ACCIONES LEAGLES CORRESPONDIENTES.`
+            );
         paragraph10.addRun(body_2);
 
-        const paragraph11 = new docx.Paragraph().distribute();
+        const paragraph11 = new docx.Paragraph().justified();
         const atention_time = new docx
-            .TextRun(`
-                HORARIOS DE ATENCION: LUNES A VIERNES DE 9:00HS A 12:30HS Y DE 17:30HS A 20:00HS
-            `);
+            .TextRun(`HORARIOS DE ATENCION: LUNES A VIERNES DE 9:00HS A 12:30HS Y DE 17:30HS A 20:00HS`);
         paragraph11.addRun(atention_time);
 
-        const paragraph12 = new docx.Paragraph().distribute();
+        const paragraph12 = new docx.Paragraph().justified();
         const expires_in = new docx
             .TextRun(`Esta propuesta vence a las 48 HS.`);
         paragraph12.addRun(expires_in);
 
+        const white_line = new docx.Paragraph();
+
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(paragraph5);
+        this.doc.addParagraph(paragraph6);
+        this.doc.addParagraph(paragraph7);
+        this.doc.addParagraph(paragraph8);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(paragraph9);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(paragraph10);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(paragraph11);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(paragraph12);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(white_line);
+        this.doc.addParagraph(white_line);
+        let table = this.doc.createTable(1, 3);
+        table.getCell(0, 0).addContent(
+            new docx.Paragraph()
+            .addRun(new docx.TextRun('').underline())
+        ).addContent(
+            new docx.Paragraph(`Juan Manuel Pérez`)
+        ).addContent(
+            new docx.Paragraph(`ABOGADO`)
+        ).addContent(
+            new docx.Paragraph(`M.P. 10092`)
+        );
+        table.getCell(0, 1).addContent(
+            new docx.Paragraph()
+            .addRun(new docx.TextRun('').underline())
+        ).addContent(
+            new docx.Paragraph(`Marco Valentín Cruz`)
+        );
+        table.getCell(0, 2).addContent(
+            new docx.Paragraph()
+            .addRun(new docx.TextRun('').underline())
+        ).addContent(
+            new docx.Paragraph(`Hugo Jesús Hauser`)
+        ).addContent(
+            new docx.Paragraph(`ABOGADO`)
+        ).addContent(
+            new docx.Paragraph(`M.P. 9827`)
+        );
+
+        table.Properties.setWidth().root[1].root[0].root[0].root.value = null;
+        table.Properties.setWidth().root[1].root[0].root[0].root.color = 'white';
+        for (let border of table.Properties.setWidth().root[1].root) {
+            border.root[0].root.value = null;
+        }
+    }
+
+    public save_document(file_name = 'letters.docx') {
+        const packer = new docx.Packer();
+
+        packer.toBlob(this.doc).then(blob => {
+            console.log(blob);
+            saveAs(blob, file_name);
+            console.log('Document created successfully');
+        });
+    }
+
+    public addHeader() {
+        let paragraph = new docx
+                .Paragraph('H & P ESTUDIO JURIDICO')
+                .heading1();
+        const paragraph2 = new docx.Paragraph();
+        const address = new docx
+            .TextRun('Dirección: Las Heras 168')
+            .bold();
+        const phone = new docx
+            .TextRun('Teléfono: 2604423601- Celular: 260-154845351 / 260-154089238 ')
+            .tab()
+            .bold();
+        paragraph2.addRun(address);
+        paragraph2.addRun(phone);
+
+        const paragraph3 = new docx.Paragraph().justified().thematicBreak();
+
+        const paragraph4 = new docx.Paragraph().end();
+        let date = new Date();
+        let options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const origin = new docx
+            .TextRun(`\nSan Rafael, Mendoza ${date.toLocaleDateString('es-ES', options)}`)
+            .bold();
+        paragraph4.addRun(origin);
+
+        this.doc.Header.addParagraph(paragraph);
+        this.doc.Header.addParagraph(paragraph2);
+        this.doc.Header.addParagraph(paragraph3);
+        this.doc.Header.addParagraph(paragraph4);
+    }
+
+    public addFooter() {
+        // TODO: create table for signatures
+        // let table = this.doc
+        //     // .Footer
+        //     .createTable(2, 2)
+        //     .setWidth(docx.WidthType.PERCENTAGE, 100)
+        //     .getCell(1, 1)
+        //     .addContent(
+        //         new docx.Paragraph().addRun(new docx.TextRun('This text should be in the middle of the cell'))
+        //         // new docx.Paragraph('This text should be in the middle of the cell')
+        //     )
+        //     .CellProperties.setWidth(100, docx.WidthType.AUTO);
+        // let table = new docx.Table(3, 4, [25, 25, 25, 25]);
+
         const paragraph13 = new docx.Paragraph();
         const firm_line_1 = new docx
-            .TextRun(`-------------------`)
+            .TextRun(`                     `)
+            .underline()
+            .tab()
             .tab()
             .tab();
         const firm_line_2 = new docx
-            .TextRun(`-------------------`)
+            .TextRun(`                     `)
+            .underline()
+            .tab()
             .tab()
             .tab();
         const firm_line_3 = new docx
-            .TextRun(`-------------------`)
+            .TextRun(`                     `)
+            .underline()
+            .tab()
             .tab()
             .tab();
         paragraph13.addRun(firm_line_1);
@@ -213,13 +303,16 @@ DE VERAZ Y CODESUR. CASO CONTRATIO SE INICIARAN LAS ACCIONES LEAGLES CORRESPONDI
         const firm_name_1 = new docx
             .TextRun(`Juan Manuel Pérez`)
             .tab()
+            .tab()
             .tab();
         const firm_name_2 = new docx
             .TextRun(`Marco Valentín Cruz`)
             .tab()
+            .tab()
             .tab();
         const firm_name_3 = new docx
             .TextRun(`Hugo Jesús Hauser`)
+            .tab()
             .tab()
             .tab();
         paragraph14.addRun(firm_name_1);
@@ -228,15 +321,18 @@ DE VERAZ Y CODESUR. CASO CONTRATIO SE INICIARAN LAS ACCIONES LEAGLES CORRESPONDI
 
         const paragraph15 = new docx.Paragraph();
         const firm_title_1 = new docx
-            .TextRun(`ABOGADO`)
+            .TextRun(`     ABOGADO     `)
+            .tab()
             .tab()
             .tab();
         const firm_title_2 = new docx
-            .TextRun(` `)
+            .TextRun(`                 `)
+            .tab()
             .tab()
             .tab();
         const firm_title_3 = new docx
-            .TextRun(`ABOGADO`)
+            .TextRun(`     ABOGADO     `)
+            .tab()
             .tab()
             .tab();
         paragraph15.addRun(firm_title_1);
@@ -260,42 +356,12 @@ DE VERAZ Y CODESUR. CASO CONTRATIO SE INICIARAN LAS ACCIONES LEAGLES CORRESPONDI
         paragraph16.addRun(firm_mat_2);
         paragraph16.addRun(firm_mat_3);
 
-        const white_line = new docx.Paragraph();
-
-        this.doc.addParagraph(paragraph);
-        this.doc.addParagraph(paragraph2);
-        this.doc.addParagraph(paragraph3);
-        this.doc.addParagraph(paragraph4);
-        this.doc.addParagraph(paragraph5);
-        this.doc.addParagraph(paragraph6);
-        this.doc.addParagraph(paragraph7);
-        this.doc.addParagraph(paragraph8);
-        this.doc.addParagraph(paragraph9);
-        this.doc.addParagraph(paragraph10);
-        this.doc.addParagraph(paragraph11);
-        this.doc.addParagraph(paragraph12);
-        this.doc.addParagraph(white_line);
-        this.doc.addParagraph(white_line);
-        this.doc.addParagraph(white_line);
-        this.doc.addParagraph(white_line);
-        this.doc.addParagraph(white_line);
-        this.doc.addParagraph(white_line);
-        this.doc.addParagraph(white_line);
-        this.doc.addParagraph(white_line);
-        this.doc.addParagraph(white_line);
-        this.doc.addParagraph(paragraph13);
-        this.doc.addParagraph(paragraph14);
-        this.doc.addParagraph(paragraph15);
-        this.doc.addParagraph(paragraph16);
-    }
-
-    public save_document(file_name = 'letters.docx') {
-        const packer = new docx.Packer();
-
-        packer.toBlob(this.doc).then(blob => {
-            console.log(blob);
-            saveAs(blob, file_name);
-            console.log('Document created successfully');
-        });
+        // this.doc.Footer.addParagraph(paragraph13);
+        // this.doc.Footer.addParagraph(paragraph14);
+        // this.doc.Footer.addParagraph(paragraph15);
+        // this.doc.Footer.addParagraph(paragraph16);
+        let table = this.doc.createTable(4, 4);
+        table.getCell(2, 2).addContent(new docx.Paragraph('Hello'));
+        // this.doc.Footer.addTable(table.setFixedWidthLayout());
     }
 }
