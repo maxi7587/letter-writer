@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-ghpages": "ng build --prod --base-href \"https://maxi7587.github.io/letter-writer/\"",
     "publish-ghpages": "yarn ngh --no-silent --dir=dist/letter-writer",
     "test": "ng test",
     "lint": "ng lint",
