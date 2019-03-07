@@ -133,8 +133,8 @@ export class AppComponent implements AfterViewInit {
         const paragraph9 = new docx.Paragraph().justified();
         const body = new docx
             .TextRun(
-                `Nos comunicamos con usted por la presente en representación de “CALZADOS LOS GALLEGOS S.R.L.”. \
-Ya que registramos a la fecha un saldo impago que mantiene con esta empresa, la cual actualmente asciende al monto \
+                `Nos comunicamos con usted por la presente en representación de “CALZADOS LOS GALLEGOS S.R.L.”, \
+ya que registramos a la fecha un saldo impago que mantiene con esta empresa, la cual actualmente asciende al monto \
 de $${total_required_data} correspondiendo la misma a la compra de mercadería realizada por usted en las \
 instalaciones de la entidad, resultando este monto la suma de capital, intereses y honorarios.`
             );
