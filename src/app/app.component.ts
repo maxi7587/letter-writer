@@ -142,18 +142,35 @@ instalaciones de la entidad, resultando este monto la suma de capital, intereses
 
         const paragraph10 = new docx.Paragraph().justified();
         const body_2 = new docx
-            .TextRun(
-                `POR ESTE MOTIVO LO INTIMAMOS A QUE CONCURRA A NUESTRO ESTUDIO JURIDICO UBICADO EN CALLE LAS HERAS 168 \
-DE ESTA CIUDAD DE SAN RAFAEL, MENDOZA, DENTRO DE LAS 48 HS. DE RECIBIDA LA PRESENTE, OTORGANDOLE POR UNICA VEZ LA POSIBILIDAD \
-DE REGULARIZAR SU SITUACION POR UN MONTO TOTAL DE $${total_charge_data} CON EL CUAL SE CANCELARIA TOTALMENTE SU DEUDA, \
-ACCEDIENDO AUTOMATICAMENTE A UNA POSIBLE FINANCIACION EN LOS PRODUCTOS DE LA EMPRESA Y UNA DESVINCULACION DE LOS SISTEMAS \
-DE VERAZ Y CODESUR. CASO CONTRATIO SE INICIARAN LAS ACCIONES LEAGLES CORRESPONDIENTES.`
-            );
-        paragraph10.addRun(body_2);
+            .TextRun(`POR ESTE MOTIVO LO INTIMAMOS A QUE CONCURRA A NUESTRO `);
+        const body_2_1 = new docx
+            .TextRun(`ESTUDIO JURÍDICO`).bold();
+        const body_2_2 = new docx
+            .TextRun(` UBICADO EN CALLE `);
+        const body_2_3 = new docx
+            .TextRun(`LAS HERAS 148 o LAS HERAS 168`).bold();
+        const body_2_4 = new docx
+            .TextRun(` DE ESTÁ CIUDAD DE SAN RAFAEL, MENDOZA, DENTRO DE LAS 48 HS. DE RECIBIDA LA PRESENTE, \
+OTORGÁNDOLE POR ÚNICA VEZ LA POSIBILIDAD DE REGULARIZAR SU SITUACION POR UN `);
+        const body_2_5 = new docx
+            .TextRun(`MONTO TOTAL DE $${total_charge_data}`).bold();
+        const body_2_6 = new docx
+            .TextRun(` CON EL CUAL SE CANCELARÍA TOTALMENTE SU DEUDA, \
+ACCEDIENDO AUTOMÁTICAMENTE A UNA POSIBLE FINANCIACIÓN EN LOS PRODUCTOS DE LA EMPRESA Y UNA DESVINCULACIÓN DE LOS SISTEMAS \
+DE VERAZ Y CODESUR. CASO CONTRARIO SE INICIARÁN LAS ACCIONES LEAGLES CORRESPONDIENTES.`);
+        paragraph10
+            .addRun(body_2)
+            .addRun(body_2_1)
+            .addRun(body_2_2)
+            .addRun(body_2_3)
+            .addRun(body_2_4)
+            .addRun(body_2_5)
+            .addRun(body_2_6);
 
         const paragraph11 = new docx.Paragraph().justified();
         const atention_time = new docx
-            .TextRun(`HORARIOS DE ATENCION: LUNES A VIERNES DE 9:00HS A 12:30HS Y DE 17:30HS A 20:00HS`);
+            .TextRun(`HORARIOS DE ATENCIÓN: LUNES A VIERNES DE 9:00HS A 12:30HS Y DE 17:30HS A 20:00HS (MES DE JULIO DE \
+9:00 AM A 13:00 PM). PARA CONCURRIR A PAGAR EN OTROS HORARIOS COMUNÍQUESE TELEFÓNICAMENTE.`);
         paragraph11.addRun(atention_time);
 
         const paragraph12 = new docx.Paragraph().justified();
@@ -175,8 +192,23 @@ DE VERAZ Y CODESUR. CASO CONTRATIO SE INICIARAN LAS ACCIONES LEAGLES CORRESPONDI
         this.doc.addParagraph(white_line);
         this.doc.addParagraph(paragraph11);
         this.doc.addParagraph(white_line);
-        this.doc.addParagraph(paragraph12);
-        this.doc.addParagraph(white_line);
+        // NOTE: paragraph 12 was replaced with table
+        // this.doc.addParagraph(paragraph12);
+        // this.doc.addParagraph(white_line);
+        let important_advise_table = this.doc.createTable(1, 1);
+        important_advise_table.getCell(0, 0).addContent(
+            new docx.Paragraph()
+            .addRun(new docx.TextRun(`IMPORTANTE:`).underline().bold())
+            .addRun(new docx.TextRun(` PRESENTANDO ESTE CUPÓN OBTENDRA UN DESCUENTO EXCLUSIVO EN LOS INTERESES POR ÚNICA VEZ.`))
+        ).addContent(
+            new docx.Paragraph(`DENTRO DE LAS 24 HORAS DE RECIBIDO: DESDE UN 30% HASTA UN 40%`).bullet()
+        ).addContent(
+            new docx.Paragraph(`DENTRO DE LAS 48 HS. DESDE UN 10 % HASTA UN 25 %.`).bullet()
+        ).addContent(
+            new docx.Paragraph()
+            .addRun(new docx.TextRun(`RECUERDE ESTE DESCEUNTO ES POR `))
+            .addRun(new docx.TextRun(`ÚNICA VEZ.`).underline().bold())
+        );
         this.doc.addParagraph(white_line);
         this.doc.addParagraph(white_line);
         this.doc.addParagraph(white_line);
