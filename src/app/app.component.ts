@@ -263,14 +263,14 @@ DE VERAZ Y CODESUR. CASO CONTRARIO SE INICIARÁN LAS ACCIONES LEAGLES CORRESPOND
 
     public addHeader() {
         let paragraph = new docx
-                .Paragraph('H & P ESTUDIO JURIDICO')
+                .Paragraph('ESTUDIO JURÍDICO')
                 .heading1();
         const paragraph2 = new docx.Paragraph();
         const address = new docx
-            .TextRun('Dirección: Las Heras 168')
+            .TextRun('Dirección: Las Heras 168 - Las Heras 168')
             .bold();
         const phone = new docx
-            .TextRun('Teléfono: 2604423601- Celular: 260-154845351 / 260-154089238 ')
+            .TextRun('Teléfono: 2604423601 Celular: 260-154845351')
             .tab()
             .bold();
         paragraph2.addRun(address);
